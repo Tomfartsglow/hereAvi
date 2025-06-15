@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avi Stinks Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .button-container {
+            margin: 2rem 0;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .counter {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+        }
+
+        .output {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stink-text {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reset-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+
+        .loading {
+            display: none;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦨 Avi Stinks Generator 🦨</h1>
+        
+        <div class="button-container">
+            <button class="generate-btn" onclick="generateStinks()">
+                Generate Random Stinks!
+            </button>
+            <button class="reset-btn" onclick="resetOutput()">
+                Reset
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            Generating stinks...
+        </div>
+
+        <div class="counter" id="counter" style="display: none;">
+            Avi stinks <span id="stink-count">0</span> times! <span class="emoji">💨</span>
+        </div>
+
+        <div class="output" id="output" style="display: none;">
+            <div class="stink-text" id="stink-text"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentCount = 0;
+
+        function generateStinks() {
+            // Generate random number between 1 and 100000
+            const randomCount = Math.floor(Math.random() * 100000) + 1;
+            currentCount = randomCount;
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('counter').style.display = 'none';
+            document.getElementById('output').style.display = 'none';
+
+            // Simulate loading time for dramatic effect
+            setTimeout(() => {
+                displayStinks(randomCount);
+            }, 1000);
+        }
+
+        function displayStinks(count) {
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+            
+            // Update counter
+            document.getElementById('stink-count').textContent = count.toLocaleString();
+            document.getElementById('counter').style.display = 'inline-block';
+
+            // Generate the stink text
+            let stinkText = '';
+            
+            // For very large numbers, we'll create a more readable format
+            if (count <= 100) {
+                // Show each "Avi stinks" individually for small numbers
+                for (let i = 0; i < count; i++) {
+                    stinkText += `Avi stinks ${getRandomEmoji()} `;
+                    if ((i + 1) % 10 === 0) stinkText += '<br>';
+                }
+            } else if (count <= 1000) {
+                // Group them for medium numbers
+                for (let i = 0; i < count; i++) {
+                    stinkText += 'Avi stinks ';
+                    if ((i + 1) % 20 === 0) stinkText += '<br>';
+                }
+            } else {
+                // For large numbers, create a more creative display
+                stinkText = `<div style="font-size: 1.3rem; margin-bottom: 20px;">🚨 MEGA STINK ALERT! 🚨</div>`;
+                
+                // Create blocks of "Avi stinks"
+                const blocksOf100 = Math.floor(count / 100);
+                const remainder = count % 100;
+                
+                for (let i = 0; i < Math.min(blocksOf100, 50); i++) {
+                    stinkText += `<div style="margin: 5px 0;">💨 Avi stinks x100 💨</div>`;
+                }
+                
+                if (blocksOf100 > 50) {
+                    stinkText += `<div style="margin: 20px 0; font-size: 1.2rem; color: #ffeb3b;">... and ${(blocksOf100 - 50) * 100} more stinks! 🤢</div>`;
+                }
+                
+                if (remainder > 0) {
+                    stinkText += `<div style="margin: 10px 0;">`;
+                    for (let i = 0; i < remainder; i++) {
+                        stinkText += 'Avi stinks ';
+                    }
+                    stinkText += `</div>`;
+                }
+                
+                stinkText += `<div style="margin-top: 20px; font-size: 1.1rem;">🏆 TOTAL STINK LEVEL: ${count.toLocaleString()} 🏆</div>`;
+            }
+
+            // Display the result
+            document.getElementById('stink-text').innerHTML = stinkText;
+            document.getElementById('output').style.display = 'block';
+        }
+
+        function getRandomEmoji() {
+            const emojis = ['💨', '🦨', '🤢', '🤮', '🚫', '💩', '🔥', '⚡'];
+            return emojis[Math.floor(Math.random() * emojis.length)];
+        }
+
+        function resetOutput() {
+            document.getElementById('counter').style.display = 'none';
+            document.getElementById('output').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            currentCount = 0;
+        }
+
+        // Add some fun interactions
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                generateStinks();
+            }
+        });
+    </script>
+</body>
+</html>
