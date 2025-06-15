@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avi Stinks Generator</title>
+    <title>Avi Stinks Generator - GitHub Pages</title>
+    <meta name="description" content="A fun generator that tells you how much Avi stinks with random numbers!">
+    <meta name="author" content="GitHub User">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -143,6 +145,9 @@
 <body>
     <div class="container">
         <h1>🦨 Avi Stinks Generator 🦨</h1>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">
+            Hosted on GitHub Pages • Click to generate random stink levels!
+        </p>
         
         <div class="button-container">
             <button class="generate-btn" onclick="generateStinks()">
@@ -254,7 +259,20 @@
             currentCount = 0;
         }
 
-        // Add some fun interactions
+        // Add GitHub Pages footer info
+        const footer = document.createElement('div');
+        footer.style.cssText = `
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        `;
+        footer.innerHTML = '⭐ Fork me on GitHub!';
+        document.body.appendChild(footer);
         document.addEventListener('keydown', function(event) {
             if (event.code === 'Space') {
                 event.preventDefault();
